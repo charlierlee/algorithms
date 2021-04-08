@@ -8,10 +8,21 @@ def testCoinchange():
 
 def testRecIntMult():
     import recintmult
-    a = 1
+    a = 1234
     b = 5678
     r = recintmult.RecIntMult(a,b)
     result = r.solve()
     print(result)
+    r.printRecursiveCalls()
+
+def testKaratsuba():
+    import karatsuba
+    a = 1234
+    b = 5678
+    r = karatsuba.Karatsuba(a,b)
+    result = r.solve()
+    print(result)
+    r.printRecursiveCalls()
 
 testRecIntMult()
+testKaratsuba()

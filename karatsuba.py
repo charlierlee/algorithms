@@ -1,9 +1,8 @@
 import pickle as pickle
 import math
-class RecIntMult:
+class Karatsuba:
     def memoize(func):
         cache = {}
-
         def wrapper(*args, **kwargs):
             key = pickle.dumps(args) + pickle.dumps(kwargs)
             if key not in cache:
@@ -54,10 +53,17 @@ class RecIntMult:
         a, b = self.splitString(inputA)
         c, d = self.splitString(inputB)
         ac = self.solveRecursive(a,c)
-        ad = self.solveRecursive(a,d)
-        bc = self.solveRecursive(b,c)
         bd = self.solveRecursive(b,d)
-        return 10**n * ac + 10**(n/2) * (ad + bc) + bd
+        ab = int(a)+int(b)
+        cd = int(c)+int(d)
+        ab,cd = str(ab), str(cd)
+        while len(ab) < len(cd) or not self.isPowerOfTwo(len(ab)):
+            ab = "0" + str(ab)
+        while len(cd) < len(ab) or not self.isPowerOfTwo(len(cd)):
+            cd = "0" + str(cd)
+        adbc = self.solveRecursive(ab,cd)
+        adbc = adbc - ac - bd
+        return 10**n * ac + 10**(n/2) * adbc + bd 
     
     def printRecursiveCalls(self):
         print(self.recursiveCalls)
