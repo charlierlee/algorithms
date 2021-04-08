@@ -8,10 +8,10 @@ def testCoinchange():
 
 def testRecIntMult():
     import recintmult
-    a = 11111111
-    b = 11111111
-    r = recintmult.RecIntMult()
-    result = r.solve(a, b)
+    a = 1
+    b = 5678
+    r = recintmult.RecIntMult(a,b)
+    result = r.solve()
     print(result)
 
 testRecIntMult()

@@ -11,6 +11,21 @@ class RecIntMult:
             return cache[key]
         return wrapper
 
+    def __init__(self, inputA, inputB):
+        self.inputA = inputA
+        self.inputB = inputB
+        self.inputA, self.inputB = str(self.inputA), str(self.inputB)
+        while len(self.inputA) < len(self.inputB) or not self.isPowerOfTwo(len(self.inputA)):
+            self.inputA = "0" + str(self.inputA)
+        while len(self.inputB) < len(self.inputA) or not self.isPowerOfTwo(len(self.inputB)):
+            self.inputB = "0" + str(self.inputB)
+        if not self.isPowerOfTwo(len(self.inputA)):
+            raise Exception("Digits not a power of 2", self.inputA) 
+        if not self.isPowerOfTwo(len(self.inputB)):
+            raise Exception("Digits not a power of 2", self.inputB)
+        if len(self.inputA) != len(self.inputB):
+            raise Exception("input size must match", self.inputA, self.inputB)
+
     def Log2(self,x):
         if x == 0:
             return False
@@ -25,28 +40,20 @@ class RecIntMult:
     #Splitting string into equal halves
     def splitString(self,s):
         return s[:len(s)//2], s[len(s)//2:]
+
+    def solve(self):
+        return self.solveRecursive(self.inputA, self.inputB)
+        
     @memoize
-    def solve(self, inputA, inputB):
-        inputADigits = len(str(inputA))
-        inputBDigits = len(str(inputB))
-        if not self.isPowerOfTwo(inputADigits):
-            raise Exception("Not a power of 2", inputADigits) 
-        if not self.isPowerOfTwo(inputBDigits):
-            raise Exception("Not a power of 2", inputBDigits)
-        if inputADigits != inputBDigits:
-            raise Exception("input size must match", inputADigits, inputBDigits)
-        n = inputADigits
-        print(n)
-        if len(str(inputA)) <= 1:
-            return inputA*inputB
-        inputAString, inputBString = str(inputA), str(inputB)
-        a, b = self.splitString(inputAString)
-        a, b = int(a), int(b)
-        c, d = self.splitString(inputBString)
-        c, d = int(a), int(b)
-        ac = self.solve(a,c)
-        ad = self.solve(a,d)
-        bc = self.solve(b,c)
-        bd = self.solve(b,d)
+    def solveRecursive(self, inputA, inputB):
+        n = len(inputA)
+        if n <= 1:
+            return int(inputA)*int(inputB)
+        a, b = self.splitString(inputA)
+        c, d = self.splitString(inputB)
+        ac = self.solveRecursive(a,c)
+        ad = self.solveRecursive(a,d)
+        bc = self.solveRecursive(b,c)
+        bd = self.solveRecursive(b,d)
         return 10**n * ac + 10**(n/2) * (ad + bc) + bd
     memoize = staticmethod( memoize )
