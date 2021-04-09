@@ -6,23 +6,21 @@ def testCoinchange():
     result = c.solve(coins, capacity)
     print(result, 'combinations')
 
-def testRecIntMult():
+
+def testRecIntMult(a, b):
     import recintmult
-    a = 1234
-    b = 5678
     r = recintmult.RecIntMult(a,b)
     result = r.solve()
     print(result)
     r.printRecursiveCalls()
 
-def testKaratsuba():
+def testKaratsuba(a, b):
     import karatsuba
-    a = 1234
-    b = 5678
     r = karatsuba.Karatsuba(a,b)
     result = r.solve()
     print(result)
     r.printRecursiveCalls()
 
-testRecIntMult()
-testKaratsuba()
+a, b = 1234, 5678
+testRecIntMult(a, b)
+testKaratsuba(a, b)

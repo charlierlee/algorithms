@@ -16,9 +16,9 @@ class Karatsuba:
         self.inputB = inputB
         self.inputA, self.inputB = str(self.inputA), str(self.inputB)
         while len(self.inputA) < len(self.inputB) or not self.isPowerOfTwo(len(self.inputA)):
-            self.inputA = "0" + str(self.inputA)
+            self.inputA = "0" + self.inputA
         while len(self.inputB) < len(self.inputA) or not self.isPowerOfTwo(len(self.inputB)):
-            self.inputB = "0" + str(self.inputB)
+            self.inputB = "0" + self.inputB
         if not self.isPowerOfTwo(len(self.inputA)):
             raise Exception("Digits not a power of 2", self.inputA) 
         if not self.isPowerOfTwo(len(self.inputB)):
@@ -52,19 +52,17 @@ class Karatsuba:
             return int(inputA)*int(inputB)
         a, b = self.splitString(inputA)
         c, d = self.splitString(inputB)
+        p, q = str(int(a)+int(b)), str(int(c)+int(d))
         ac = self.solveRecursive(a,c)
         bd = self.solveRecursive(b,d)
-        ab = int(a)+int(b)
-        cd = int(c)+int(d)
-        ab,cd = str(ab), str(cd)
-        while len(ab) < len(cd) or not self.isPowerOfTwo(len(ab)):
-            ab = "0" + str(ab)
-        while len(cd) < len(ab) or not self.isPowerOfTwo(len(cd)):
-            cd = "0" + str(cd)
-        adbc = self.solveRecursive(ab,cd)
-        adbc = adbc - ac - bd
+        while len(p) < len(q) or not self.isPowerOfTwo(len(p)):
+            p = "0" + p
+        while len(q) < len(p) or not self.isPowerOfTwo(len(q)):
+            q = "0" + q
+        pq = self.solveRecursive(p,q)
+        adbc = pq - ac - bd
         return 10**n * ac + 10**(n/2) * adbc + bd 
     
     def printRecursiveCalls(self):
-        print(self.recursiveCalls)
+        print('Karatsuba', self.recursiveCalls)
     memoize = staticmethod( memoize )

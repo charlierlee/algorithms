@@ -60,5 +60,5 @@ class RecIntMult:
         return 10**n * ac + 10**(n/2) * (ad + bc) + bd
     
     def printRecursiveCalls(self):
-        print(self.recursiveCalls)
+        print('RecIntMult', self.recursiveCalls)
     memoize = staticmethod( memoize )
