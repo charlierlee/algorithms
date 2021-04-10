@@ -14,7 +14,8 @@ class MergeSort:
         return self.solveRecursive(self.items)
 
     # the idea here is i+j should sum to n as you increment i and j, 
-    # and once out of bound, the next item a or b is infinity
+    # but once out of bound, the next item of a or b is infinity 
+    # therefore, the comparison will always switch to the other array
     def merge(self, a, b, n):
         result = [0] * n
         a = a + [math.inf]
