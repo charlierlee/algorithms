@@ -61,7 +61,7 @@ class Karatsuba:
             q = "0" + q
         pq = self.solveRecursive(p,q)
         adbc = pq - ac - bd
-        return 10**n * ac + 10**(n/2) * adbc + bd 
+        return 10**n * ac + 10**(n//2) * adbc + bd
     
     def printRecursiveCalls(self):
         print('Karatsuba', self.recursiveCalls)

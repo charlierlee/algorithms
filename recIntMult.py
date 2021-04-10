@@ -57,7 +57,7 @@ class RecIntMult:
         ad = self.solveRecursive(a,d)
         bc = self.solveRecursive(b,c)
         bd = self.solveRecursive(b,d)
-        return 10**n * ac + 10**(n/2) * (ad + bc) + bd
+        return 10**n * ac + 10**(n//2) * (ad + bc) + bd
     
     def printRecursiveCalls(self):
         print('RecIntMult', self.recursiveCalls)
