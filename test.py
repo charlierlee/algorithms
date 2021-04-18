@@ -58,4 +58,34 @@ def testMergeSort():
             print("error")
     tA.printRecursiveCalls()
 
-testMergeSort()
+def testCountInversions():
+    import countInversions
+    import random
+    a = []
+    start, end = 1, 256
+    for num in range(start, end + 1):
+        if num % 2 != 0:
+            a.append(num)
+    for num in range(start, end + 1):
+        if num % 2 == 0:
+            a.append(num)
+    #a = [random.randrange(1, 9, 1) for i in range(9)]
+    tA = countInversions.CountInversions(a)
+    testA = tA.solve()
+    print(testA[1])
+    def getInvCount(arr, n):
+        inv_count = 0
+        for i in range(n):
+            for j in range(i + 1, n):
+                if (arr[i] > arr[j]):
+                    inv_count += 1
+    
+        return inv_count
+    
+    # Driver Code
+    arr = a
+    n = len(arr)
+    print("Number of inversions are",
+                getInvCount(arr, n))
+
+testCountInversions()
