@@ -17,33 +17,25 @@ class CountInversions:
     # but once out of bound, the next item of a or b is infinity 
     # therefore, the comparison will always switch to the other array
     def merge(self, a, b, n, total):
-        count = []
-        pusher = []
+        inversionCount = 0
         result = [0] * n
         a = a + [math.inf]
         b = b + [math.inf]
         i, j = 0, 0
         q, r = 0, 0
         for k in range(0, n):
+            #if a[i] > n//2 and b[j] > n//2 and a[i] != math.inf and b[j] != math.inf:
+            #    inversionCount += 1
+            #if a[i] < n//2 and b[j] < n//2 and a[i] != math.inf and b[j] != math.inf:
+            #    inversionCount += 1
             if a[i] < b[j]:
                 result[k] = a[i]
                 i+=1
-                pusher.append(1)
             else:
                 result[k] = b[j]
+                inversionCount += n//2 - i
                 j+=1
-                pusher.append(0)
-        prev = pusher[0]
-        for k in range(1, len(pusher)):
-            if prev != pusher[k]:
-                count.append(pusher[k])
-                prev = pusher[k]
-
-        if len(count)-1 == 0:
-            num = 1
-        else:
-            num = int((total) * (len(count)-1) / 4 + 1)
-        return result, num
+        return result, inversionCount
 
     def solveRecursive(self, items):
         self.recursiveCalls += 1
@@ -53,7 +45,7 @@ class CountInversions:
             return baseCase, 0
         if n == 1:
             baseCase.append(items[0]), 0
-            return baseCase
+            return baseCase, 0
         if n == 2:
             if items[0] < items[1]:
                 baseCase.append(items[0])

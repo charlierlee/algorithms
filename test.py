@@ -62,14 +62,18 @@ def testCountInversions():
     import countInversions
     import random
     a = []
-    start, end = 1, 256
+    start, end = 1, 56
     for num in range(start, end + 1):
         if num % 2 != 0:
             a.append(num)
     for num in range(start, end + 1):
         if num % 2 == 0:
             a.append(num)
-    #a = [random.randrange(1, 9, 1) for i in range(9)]
+    #a = [1,3,5,7,2,4,6,8]
+    #a = [1,3,5,7,9,11,13,15,2,4,6,8,10,12,14,16]
+    #a = [1,2,3,4,5,6,7,8]
+    #a = random.sample(range(1, 17), 16)
+    print(a)
     tA = countInversions.CountInversions(a)
     testA = tA.solve()
     print(testA[1])
