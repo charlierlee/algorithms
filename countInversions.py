@@ -16,7 +16,7 @@ class CountInversions:
     # the idea here is i+j should sum to n as you increment i and j, 
     # but once out of bound, the next item of a or b is infinity 
     # therefore, the comparison will always switch to the other array
-    def merge(self, a, b, n, total):
+    def merge(self, a, b, n):
         inversionCount = 0
         result = [0] * n
         a = a + [math.inf]
@@ -54,12 +54,12 @@ class CountInversions:
             else:
                 baseCase.append(items[1])
                 baseCase.append(items[0])
-                return baseCase, 0
+                return baseCase, 1
         left, right = self.splitArray(items)
         sortedLeft, countLeft = self.solveRecursive(left)
         sortedRight, countRight = self.solveRecursive(right)
-        merged, mergeCount = self.merge(sortedLeft,sortedRight,n, countLeft + countRight)
-        return merged, countLeft + mergeCount + countRight
+        merged, mergeCount = self.merge(sortedLeft,sortedRight,n)
+        return merged, countLeft + countRight + mergeCount
     
     def printRecursiveCalls(self):
         print('CountInversions', self.recursiveCalls)
