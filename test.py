@@ -92,4 +92,15 @@ def testCountInversions():
     print("Number of inversions are",
                 getInvCount(arr, n))
 
-testCountInversions()
+def testMatrixMult():
+    import matrixMult
+    import numpy as np
+    import random
+    x = np.arange(64).reshape((8,8))
+    y = np.arange(64).reshape((8,8))
+    tA = matrixMult.MatrixMult(x,y)
+    testA = tA.solve()
+    print('testA',testA)
+    print('numpy',np.matmul(x, y))
+    
+testMatrixMult()
