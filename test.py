@@ -96,11 +96,13 @@ def testMatrixMult():
     import matrixMult
     import numpy as np
     import random
-    x = np.arange(64).reshape((8,8))
-    y = np.arange(64).reshape((8,8))
+    exponent = 6
+    x = np.random.rand(2**exponent,2**exponent)
+    y = np.random.rand(2**exponent,2**exponent)
+    print('numpy',np.sum(np.matmul(x, y)))
     tA = matrixMult.MatrixMult(x,y)
     testA = tA.solve()
-    print('testA',testA)
-    print('numpy',np.matmul(x, y))
+    print('testA',np.sum(testA))
+    
     
 testMatrixMult()
