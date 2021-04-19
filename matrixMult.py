@@ -52,20 +52,19 @@ class MatrixMult:
             return X[0][0] * Y[0][0]
         a, b, c, d = self.splitString(X)
         e, f, g, h = self.splitString(Y)
-        ae = self.solveRecursive(a,e)
-        bg = self.solveRecursive(b,g)
-        af = self.solveRecursive(a,f)
-        bh = self.solveRecursive(b,h)
 
-        ce = self.solveRecursive(c,e)
-        dg = self.solveRecursive(d,g)
-        cf = self.solveRecursive(c,f)
-        dh = self.solveRecursive(d,h)
-
-        _a = ae+bg
-        _b = af+bh
-        _c = ce+dg
-        _d = cf+dh
+        p1 = self.solveRecursive(a,f - h)
+        p2 = self.solveRecursive(a + b,h)
+        p3 = self.solveRecursive(c + d, e)
+        p4 = self.solveRecursive(d,g - e)
+        p5 = self.solveRecursive(a + d,e + h)
+        p6 = self.solveRecursive(b - d,g + h)
+        p7 = self.solveRecursive(a - c,e + f)
+        
+        _a = p5 + p4 - p2 + p6
+        _b = p1 + p2
+        _c = p3 + p4
+        _d = p1 + p5 - p3 - p7
         return np.vstack([np.hstack([_a, _c]), np.hstack([_b, _d])])
 
     def printRecursiveCalls(self):
