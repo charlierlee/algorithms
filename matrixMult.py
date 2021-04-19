@@ -37,6 +37,8 @@ class MatrixMult:
     def splitString(self,xs):
         x = len(xs)//2
         y = len(xs)//2
+        #bl = bottom left, in latax it is top right
+        #tr = top right, in latax it is bottom left
         tl,bl,tr,br = xs[:x, :y], xs[:x, y:], xs[x:, :y], xs[x:, y:]
         return tl,bl,tr,br
 
@@ -66,6 +68,8 @@ class MatrixMult:
         bl = p3 + p4
         tr = p1 + p2
         br = p1 + p5 - p3 - p7
+        #bl = in latax it is top right
+        #tr = in latax it is bottom left
         return np.vstack([np.hstack([tl, bl]), np.hstack([tr, br])])
 
     def printRecursiveCalls(self):
