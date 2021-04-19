@@ -37,7 +37,8 @@ class MatrixMult:
     def splitString(self,xs):
         x = len(xs)//2
         y = len(xs)//2
-        return xs[:x, :y], xs[:x, y:], xs[x:, :y], xs[x:, y:]
+        tl,bl,tr,br = xs[:x, :y], xs[:x, y:], xs[x:, :y], xs[x:, y:]
+        return tl,bl,tr,br
 
     def solve(self):
         return self.solveRecursive(self.X, self.Y)
@@ -61,11 +62,11 @@ class MatrixMult:
         p6 = self.solveRecursive(b - d,g + h)
         p7 = self.solveRecursive(a - c,e + f)
         
-        _a = p5 + p4 - p2 + p6
-        _b = p1 + p2
-        _c = p3 + p4
-        _d = p1 + p5 - p3 - p7
-        return np.vstack([np.hstack([_a, _c]), np.hstack([_b, _d])])
+        tl = p5 + p4 - p2 + p6
+        bl = p3 + p4
+        tr = p1 + p2
+        br = p1 + p5 - p3 - p7
+        return np.vstack([np.hstack([tl, bl]), np.hstack([tr, br])])
 
     def printRecursiveCalls(self):
         print('matrixMult', self.recursiveCalls)
