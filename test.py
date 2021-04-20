@@ -57,6 +57,27 @@ def testMergeSort():
         if (testA[i]) != (testB[i]):
             print("error")
     tA.printRecursiveCalls()
+def testMergeSort2d():
+    import mergeSort2d
+    import random
+    A = []
+    keyIndex = 0
+    a = [random.randrange(1, 100, 1) for i in range(100)]
+    b = [random.randrange(1, 100, 1) for i in range(100)]
+    A.append(a)
+    A.append(b)
+    tA = mergeSort2d.MergeSort2d()
+    tA.solve(A,0)
+    
+    from sorting_techniques import pysort
+    sortObj = pysort.Sorting()
+    testB = sortObj.mergeSort(A[keyIndex])
+    if len(A[keyIndex]) != len(testB):
+        print('array not equal', len(A[keyIndex]), len(testB))
+        return
+    for i in range(len(a)):
+        if A[keyIndex][i] != testB[i]:
+            print("error")
 
 def testCountInversions():
     import countInversions
@@ -126,4 +147,4 @@ def testClostestDistance():
     print(testA[1])
     tA.printRecursiveCalls()
 
-testClostestDistance()
+testMergeSort2d()
