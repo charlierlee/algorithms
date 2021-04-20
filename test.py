@@ -92,17 +92,30 @@ def testCountInversions():
     print("Number of inversions are",
                 getInvCount(arr, n))
 
+def testMatrixMultNumpy():
+    import matrixMultNumpy
+    import numpy as np
+    import random
+    exponent = 7
+    x = np.random.rand(2**exponent,2**exponent)
+    y = np.random.rand(2**exponent,2**exponent)
+    print('numpy',np.sum(np.matmul(x, y)))
+    tA = matrixMultNumpy.MatrixMult(x,y)
+    testA = tA.solve()
+    print('testA',np.sum(testA))
+    
 def testMatrixMult():
     import matrixMult
     import numpy as np
     import random
-    exponent = 6
+    exponent = 7
+    n = 2**exponent
     x = np.random.rand(2**exponent,2**exponent)
     y = np.random.rand(2**exponent,2**exponent)
     print('numpy',np.sum(np.matmul(x, y)))
-    tA = matrixMult.MatrixMult(x,y)
+    tA = matrixMult.MatrixMult(x.tolist(),y.tolist())
     testA = tA.solve()
     print('testA',np.sum(testA))
-    
-    
+
+testMatrixMultNumpy()
 testMatrixMult()
