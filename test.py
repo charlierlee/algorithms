@@ -117,5 +117,13 @@ def testMatrixMult():
     testA = tA.solve()
     print('testA',np.sum(testA))
 
-testMatrixMultNumpy()
-testMatrixMult()
+def testClostestDistance():
+    import closestDistance
+    import random
+    a = random.sample(range(1, 300000000001), 300000)
+    tA = closestDistance.ClosestDistance(a)
+    testA = tA.solve()
+    print(testA[1])
+    tA.printRecursiveCalls()
+
+testClostestDistance()
