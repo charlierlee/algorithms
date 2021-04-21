@@ -1,69 +1,76 @@
 import math
+import copy
+class Point():
+	def __init__(self, x, y):
+		self.x = x
+		self.y = y
 
 class ClosestDistance:
 
+    def dist(self, p1, p2):
+        return math.sqrt((p1.x - p2.x) *
+                        (p1.x - p2.x) +
+                        (p1.y - p2.y) *
+                        (p1.y - p2.y))
+                        
     def __init__(self, items):
         self.recursiveCalls = 0
-        self.items = items
-
-    #Splitting string into equal halves
-    def splitArray(self,s):
-        return s[:len(s)//2], s[len(s)//2:]
+        self.A = sorted(items, key=lambda point: point.x)
+        self.B = sorted(items, key=lambda point: point.y)
 
     def solve(self):
-        return self.solveRecursive(self.items)
+        return self.solveRecursive(self.A, self.B)
 
-    def merge(self, a, b, n):
-        distance = math.inf
-        result = [0] * n
-        a = a + [math.inf]
-        b = b + [math.inf]
-        i, j = 0, 0
-        q, r = 0, 0
-        for k in range(0, n):
-            if a[i] < b[j]:
-                result[k] = a[i]
-                i+=1
-            else:
-                result[k] = b[j]
-                j+=1
-            if k > 0:
-                d = (result[k] - result[k-1]) ** 2
-                if d < distance:
-                    distance = d
-        return result, distance
+    def splitArray(self,arrA, arrB):
+        return arrA[:len(arrA)//2], arrA[len(arrA)//2:], arrB[:len(arrB)//2], arrB[len(arrB)//2:]
 
-    def solveRecursive(self, items):
+    def solveRecursive(self, arrA, arrB):
         self.recursiveCalls += 1
-        n = len(items)
-        baseCase = []
+        n = len(arrA)
+        baseCaseA = []
+        baseCaseB = []
         if n == 0:
-            return baseCase, math.inf
+            raise Exception('n=0')
         if n == 1:
-            baseCase.append(items[0])
-            return baseCase, math.inf
+            raise Exception('n=1')
         if n == 2:
-            if items[0] < items[1]:
-                baseCase.append(items[0])
-                baseCase.append(items[1])
-                return baseCase, (items[0] - items[1]) ** 2
-            else:
-                baseCase.append(items[1])
-                baseCase.append(items[0])
-                return baseCase, (items[0] - items[1]) ** 2
-        left, right = self.splitArray(items)
-        sortedLeft, distanceLeft = self.solveRecursive(left)
-        sortedRight, distanceRight = self.solveRecursive(right)
-        merged, distanceCenter = self.merge(sortedLeft,sortedRight,n)
-        distance = math.inf
-        if distanceLeft < distanceRight:
-            distance = distanceLeft
-        else:
-            distance = distanceRight
-        if distanceCenter < distance:
-            distance = distanceCenter
-        return merged, distance
-    
-    def printRecursiveCalls(self):
-        print('ClosestDistance', self.recursiveCalls)
+            return arrA, arrB, self.dist(arrA[0], arrA[1]), self.dist(arrB[0], arrB[1])
 
+        leftA, rightA, leftB, rightB = self.splitArray(arrA, arrB)
+        dividedLeftA, dividedLeftB, distLeftA, distLeftB = self.solveRecursive(leftA, leftB)
+        dividiedRightA, dividedRightB, distRightA, distRightB = self.solveRecursive(rightA, rightB)
+        mergedA, mergedB, mergeCount = self.merge(dividedLeftA,dividiedRightA,dividedLeftB,dividedRightB, distLeftA, distLeftB, distRightA,distRightB, n)
+        return mergedA, mergedB, mergeCount, mergeCount
+
+    def merge(self, la, ra, lb, rb, distLeftA, distLeftB, distRightA, distRightB, n):
+        min_distance = math.inf
+        if distLeftA < min_distance:
+            min_distance = distLeftA
+        if distLeftB < min_distance:
+            min_distance = distLeftB
+        if distRightA < min_distance:
+            min_distance = distRightA
+        if distRightB < min_distance:
+            min_distance = distRightB
+        resultX = [0] * n
+        resultY = [0] * n
+        la = la + [Point(0,0)]
+        ra = ra + [Point(math.inf,math.inf)]
+        lb = lb + [Point(0,0)]
+        rb = rb + [Point(math.inf,math.inf)]
+        i, j = 0, 0
+        for k in range(0, n):
+            d1, d2 = self.dist(la[i],ra[i]), self.dist(lb[j],rb[j])
+            if d1 < d2:
+                resultX[k] = la[i]
+                resultY[k] = ra[i]
+                i+=1
+                if d1 < min_distance:
+                    min_distance = d1
+            else:
+                resultX[k] = lb[j]
+                resultY[k] = rb[j]
+                if d2 < min_distance:
+                    min_distance = d2
+                j+=1
+        return resultX, resultY, min_distance

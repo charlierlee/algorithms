@@ -43,20 +43,25 @@ def testKaratsuba():
 def testMergeSort():
     import mergeSort
     import random
-    a = [random.randrange(1, 100, 1) for i in range(100)]
+    a = random.sample(range(1, 10**18), 10**6)
+    print('mergeSort started')
     tA = mergeSort.MergeSort(a)
     testA = tA.solve()
-    
+    tA.printRecursiveCalls()
+    print('pysort started')
     from sorting_techniques import pysort
     sortObj = pysort.Sorting()
     testB = sortObj.mergeSort(a)
+    print('pysort done')
+    '''
     if len(testA) != len(testB):
         print('array not equal', len(testA), len(testB))
         return
     for i in range(len(a)):
         if (testA[i]) != (testB[i]):
             print("error")
-    tA.printRecursiveCalls()
+    '''
+    
 def testMergeSort2d():
     import mergeSort2d
     import random
@@ -67,7 +72,7 @@ def testMergeSort2d():
     A.append(a)
     A.append(b)
     tA = mergeSort2d.MergeSort2d()
-    tA.solve(A,0)
+    tA.solve(A,keyIndex)
     
     from sorting_techniques import pysort
     sortObj = pysort.Sorting()
@@ -93,7 +98,7 @@ def testCountInversions():
     #a = [1,3,5,7,2,4,6,8]
     #a = [1,3,5,7,9,11,13,15,2,4,6,8,10,12,14,16]
     #a = [1,2,3,4,5,6,7,8]
-    a = random.sample(range(1, 30001), 30000)
+    a = random.sample(range(1, 10**18), 10**6)
     #print(a)
     tA = countInversions.CountInversions(a)
     testA = tA.solve()
@@ -141,10 +146,38 @@ def testMatrixMult():
 def testClostestDistance():
     import closestDistance
     import random
-    a = random.sample(range(1, 300000000001), 300000)
-    tA = closestDistance.ClosestDistance(a)
-    testA = tA.solve()
-    print(testA[1])
-    tA.printRecursiveCalls()
+    import copy
+    
+    A = []
+    a = random.sample(range(1, 2**63), 2**13)
+    b = random.sample(range(1, 2**63), 2**13)
+    a1 = copy.copy(a)
+    b1 = copy.copy(a)
+    a2 = copy.copy(a)
+    b2 = copy.copy(a)
+    a3 = copy.copy(a)
+    b3 = copy.copy(a)
+    print(2**13)
+    import closestDistanceTest
+    n = len(a)
+    
+    P2 = [closestDistanceTest.Point(x, y) for x,y in zip(a3,b3)]
+    
+    print("bruteForce smallest distance is",
+                    closestDistanceTest.bruteForce(P2, n))
+    
+    A = [closestDistance.Point(x, y) for x,y in zip(a1,b1)]
+    print('ClostestDistance started')
+    tA = closestDistance.ClosestDistance(A)
+    a,b,c,d = tA.solve()
+    print(c)
+    print('ClostestDistance done')
+    
 
-testMergeSort2d()
+    
+    # This code is contributed
+    # by Prateek Gupta (@prateekgupta10)
+
+
+#testMergeSort()
+testClostestDistance()

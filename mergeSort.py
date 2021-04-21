@@ -54,5 +54,5 @@ class MergeSort:
         return self.merge(sortedLeft,sortedRight,n)
     
     def printRecursiveCalls(self):
-        print('MergeSort', self.recursiveCalls)
+        print('MergeSort', self.recursiveCalls, 'completed')
 
