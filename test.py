@@ -147,37 +147,56 @@ def testClostestDistance():
     import closestDistance
     import random
     import copy
-    
-    A = []
-    a = random.sample(range(1, 2**63), 2**13)
-    b = random.sample(range(1, 2**63), 2**13)
-    a1 = copy.copy(a)
-    b1 = copy.copy(a)
-    a2 = copy.copy(a)
-    b2 = copy.copy(a)
-    a3 = copy.copy(a)
-    b3 = copy.copy(a)
-    print(2**13)
-    import closestDistanceTest
-    n = len(a)
-    
-    P2 = [closestDistanceTest.Point(x, y) for x,y in zip(a3,b3)]
-    
-    print("bruteForce smallest distance is",
-                    closestDistanceTest.bruteForce(P2, n))
-    
-    A = [closestDistance.Point(x, y) for x,y in zip(a1,b1)]
-    print('ClostestDistance started')
-    tA = closestDistance.ClosestDistance(A)
-    a,b,c,d = tA.solve()
-    print(c)
-    print('ClostestDistance done')
-    
+    outcome = True
+    while outcome == True:
+        A = []
+        a = random.sample(range(1, 2**24), 2**12)
+        b = random.sample(range(1, 2**24), 2**12)
+        a1 = copy.copy(a)
+        b1 = copy.copy(b)
+        a2 = copy.copy(a)
+        b2 = copy.copy(b)
+        a3 = copy.copy(a)
+        b3 = copy.copy(b)
+        #print(a)
+        #print(b)
+        print(2**13)
+        import closestDistanceTest
+        
+        #a3 = [8, 50, 54, 52]
 
-    
-    # This code is contributed
-    # by Prateek Gupta (@prateekgupta10)
+        #b3 = [41, 49, 34, 52]
 
+
+
+        #a3 = [62, 41, 33, 61, 57, 63, 49, 46]
+        #b3 = [1, 39, 31, 46, 58, 23, 38, 26]
+
+        n = len(a3)
+        P2 = [closestDistanceTest.Point(x, y) for x,y in zip(a3,b3)]
+        print("bruteForce started")
+        t = closestDistanceTest.bruteForce(P2, n)
+        print("bruteForce smallest distance is",
+                        t)
+        print("bruteForce ended")
+        
+        A = [closestDistance.Point(x, y) for x,y in zip(a1,b1)]
+
+        #a1 = [8, 50, 54, 52]
+        #b1 = [41, 49, 34, 52]
+
+        #a1 = [62, 41, 33, 61, 57, 63, 49, 46]
+        #b1 = [1, 39, 31, 46, 58, 23, 38, 26]
+
+        A = [closestDistance.Point(x, y) for x,y in zip(a1,b1)]
+        print('ClostestDistance started')
+        tA = closestDistance.ClosestDistance()
+        b = tA.closest(A, n)
+
+        print(b)
+        print('ClostestDistance ended')
+        print(b == t)
+        outcome = b == t
 
 #testMergeSort()
 testClostestDistance()
