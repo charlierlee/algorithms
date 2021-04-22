@@ -7,28 +7,90 @@ class Point():
 
 class ClosestDistance:
 
-    # A utility function to find the 
-    # distance between two points 
     def dist(self, p1, p2):
-        return math.sqrt((p1.x - p2.x) * 
+        return math.sqrt((p1.x - p2.x) *
                         (p1.x - p2.x) +
-                        (p1.y - p2.y) * 
-                        (p1.y - p2.y)) 
-    
-    # A Brute Force method to return the 
-    # smallest distance between two points 
+                        (p1.y - p2.y) *
+                        (p1.y - p2.y))
+                        
+    def __init__(self, items):
+        self.recursiveCalls = 0
+        self.A = sorted(items, key=lambda point: point.x)
+        self.B = sorted(items, key=lambda point: point.y)
+
+    def solve(self):
+        return self.solveRecursive(self.A, self.B)
+
+    def splitArray(self,arrA):
+        return arrA[:len(arrA)//2], arrA[len(arrA)//2:]
+
+    def solveRecursive(self, arrA, arrB):
+        self.recursiveCalls += 1
+        n = len(arrA)
+        if n == 0:
+            raise Exception('n=0')
+        # If there are 2 or 3 points, 
+        # then use brute force 
+        if n <= 3:
+            min_val = self.bruteForce(arrA, n)
+            #baseCaseR, min_r = self.bruteForce(arrB, n)
+            return arrA, min_val
+
+        mid = n // 2
+        midPoint = arrA[mid]
+        leftA, rightA = self.splitArray(arrA)
+        dividedLeftA, distLeftA = self.solveRecursive(leftA, arrB)
+        dividiedRightA, distRightA = self.solveRecursive(rightA, arrB)
+        mergedA, merge_min = self.merge(dividedLeftA,dividiedRightA, distLeftA, distRightA, n, midPoint, arrB)
+        return mergedA, merge_min
+
+    def merge(self, a, b, distLeftA, distRightA, n, midPoint, Q):
+        lr_d = min(distLeftA, distRightA)
+
+        m = n//2
+        inversionCount = 0
+        result = [0] * n
+        a = a + [Point(math.inf,math.inf)]
+        b = b + [Point(math.inf,math.inf)]
+        i, j = 0, 0
+        stripA = []
+        stripB = []
+        for k in range(0, n):
+            if a[i].x < b[j].x:
+                result[k] = a[i]
+                i+=1
+            else:
+                result[k] = b[j]
+                inversionCount += n//2 - i
+                if inversionCount > 0:
+                    raise Exception('inversionCount increased. List is not sorted')
+                j+=1
+
+            if abs(result[k].x - midPoint.x) < lr_d: 
+                stripA.append(result[k])
+            if abs(Q[k].x - midPoint.x) < lr_d: 
+                stripB.append(Q[k])
+                
+        stripA.sort(key = lambda point: point.y) #<-- REQUIRED
+
+        min_a = self.stripClosest(stripA, len(stripA), lr_d)
+        min_b = self.stripClosest(stripB, len(stripB), lr_d)
+        
+        return result, min(min_a, min_b)
+
+    # A Brute Force method to return the
+    # smallest distance between two points
     # in P[] of size n
-    def bruteForce(self, P, n):
-        min_val = float('inf') 
+    def bruteForce(self, P, n, min_val=float('inf')):
         for i in range(n):
             for j in range(i + 1, n):
-                if self.dist(P[i], P[j]) < min_val:
+                min_distance = self.dist(P[i], P[j])
+                if min_distance < min_val:
                     min_val = self.dist(P[i], P[j])
-    
         return min_val
     
     # A utility function to find the 
-    # distance beween the self.closest points of 
+    # distance beween the closest points of 
     # strip of given size. All points in 
     # strip[] are sorted accordint to 
     # y coordinate. They all have an upper 
@@ -36,78 +98,21 @@ class ClosestDistance:
     # Note that this method seems to be 
     # a O(n^2) method, but it's a O(n) 
     # method as the inner loop runs at most 6 times
+    # IMPORTANT: Preprocessing Ruequired: strip must be sorted by 'y' point asc
     def stripClosest(self, strip, size, d):
-    
+        
         # Initialize the minimum distance as d 
         min_val = d 
-
+    
+        # Pick all points one by one and 
+        # try the next points till the difference 
+        # between y coordinates is smaller than d. 
+        # This is a proven fact that this loop
+        # runs at most 6 times 
         for i in range(size):
             j = i + 1
-            while j < size:
-                dist = self.dist(strip[i], strip[j])
-                if dist < min_val:
-                    min_val = dist
+            while j < size and (dist := self.dist(strip[j],strip[i])) < min_val: 
+                min_val = dist
                 j += 1
-
+    
         return min_val 
-    
-    # A recursive function to find the 
-    # smallest distance. The array P contains 
-    # all points sorted according to x coordinate
-    def closestUtil(self, P, Q, n):
-        
-        # If there are 2 or 3 points, 
-        # then use brute force 
-        if n <= 3: 
-            return self.bruteForce(P, n) 
-    
-        # Find the middle point 
-        mid = n // 2
-        midPoint = P[mid]
-    
-        # Consider the vertical line passing 
-        # through the middle point calculate 
-        # the smallest distance dl on left 
-        # of middle point and dr on right side 
-        l = P[:mid]
-        r = P[mid:]
-        dl = self.closestUtil(P[:mid], Q, mid)
-        dr = self.closestUtil(P[mid:], Q, n - mid) 
-    
-        # Find the smaller of two distances 
-        d = min(dl, dr)
-    
-        # Build an array strip[] that contains 
-        # points close (closer than d) 
-        # to the line passing through the middle point 
-        strip = [] 
-        lr = l + r
-        for i in range(n): 
-            if abs(lr[i].x - midPoint.x) < d: 
-                strip.append(lr[i])
-        strip.sort(key = lambda point: point.y)
-        min_a = min(d, self.stripClosest(strip, len(strip), d))
-
-        strip = []   
-        for i in range(n): 
-            if abs(Q[i].x - midPoint.x) < d: 
-                strip.append(Q[i])
-        min_b = min(d, self.stripClosest(strip, len(strip), d))
-        strip.sort(key = lambda point: point.y) 
-        
-        # Find the self.closest points in strip. 
-        # Return the minimum of d and self.closest 
-        # distance is strip[] 
-        return min(min_a,min_b)
-    
-    # The main function that finds
-    # the smallest distance. 
-    # This method mainly uses self.closestUtil()
-    def closest(self,P, n):
-        P.sort(key = lambda point: point.x)
-        Q = copy.deepcopy(P)
-        Q.sort(key = lambda point: point.y)    
-    
-        # Use recursive function self.closestUtil() 
-        # to find the smallest distance 
-        return self.closestUtil(P, Q, n)

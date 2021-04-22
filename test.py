@@ -1,3 +1,4 @@
+import time
 
 def testCoinchange():
     import coinChange
@@ -150,8 +151,8 @@ def testClostestDistance():
     outcome = True
     while outcome == True:
         A = []
-        a = random.sample(range(1, 2**24), 2**12)
-        b = random.sample(range(1, 2**24), 2**12)
+        a = random.sample(range(1, 10**18), 10**3)
+        b = random.sample(range(1, 10**18), 10**3)
         a1 = copy.copy(a)
         b1 = copy.copy(b)
         a2 = copy.copy(a)
@@ -166,21 +167,26 @@ def testClostestDistance():
         #a3 = [8, 50, 54, 52]
 
         #b3 = [41, 49, 34, 52]
-
-
+        t2Result = None
+        t3Result = None
+        n = len(a3)
+        start_time = time.time()
+        P3 = [closestDistanceTest.Point(x, y) for x,y in zip(a3,b3)]
+        t3 = closestDistanceTest.ClosestDistanceTest()
+        t3Result = t3.bruteForce(P3, n)
+        print("bruteForce smallest distance is",t3Result)
+        print("--- %s seconds ---" % (time.time() - start_time))
 
         #a3 = [62, 41, 33, 61, 57, 63, 49, 46]
         #b3 = [1, 39, 31, 46, 58, 23, 38, 26]
 
-        n = len(a3)
-        P2 = [closestDistanceTest.Point(x, y) for x,y in zip(a3,b3)]
-        print("bruteForce started")
-        t = closestDistanceTest.bruteForce(P2, n)
-        print("bruteForce smallest distance is",
-                        t)
-        print("bruteForce ended")
-        
-        A = [closestDistance.Point(x, y) for x,y in zip(a1,b1)]
+        n = len(a2)
+        start_time = time.time()
+        P2 = [closestDistanceTest.Point(x, y) for x,y in zip(a2,b2)]
+        t2 = closestDistanceTest.ClosestDistanceTest()
+        t2Result = t2.closest(P2, n)
+        print("baseline smallest distance is",t2Result)
+        print("--- %s seconds ---" % (time.time() - start_time))
 
         #a1 = [8, 50, 54, 52]
         #b1 = [41, 49, 34, 52]
@@ -188,15 +194,18 @@ def testClostestDistance():
         #a1 = [62, 41, 33, 61, 57, 63, 49, 46]
         #b1 = [1, 39, 31, 46, 58, 23, 38, 26]
 
-        A = [closestDistance.Point(x, y) for x,y in zip(a1,b1)]
+        P1 = [closestDistance.Point(x, y) for x,y in zip(a1,b1)]
         print('ClostestDistance started')
-        tA = closestDistance.ClosestDistance()
-        b = tA.closest(A, n)
-
-        print(b)
-        print('ClostestDistance ended')
-        print(b == t)
-        outcome = b == t
+        
+        start_time = time.time()
+        t1 = closestDistance.ClosestDistance(P1)
+        a, t1Result = t1.solve()
+        print("--- %s seconds ---" % (time.time() - start_time))
+        print("ClostestDistance smallest distance is",t1Result)
+        outcome = False
+        outcome = t1Result == t2Result == t3Result
+        
+        print(outcome)
 
 #testMergeSort()
 testClostestDistance()
