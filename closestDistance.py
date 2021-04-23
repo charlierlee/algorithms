@@ -70,8 +70,12 @@ class ClosestDistance:
                 stripA.append(result[k])
             if abs(Q[k].x - midPoint.x) < lr_d: 
                 stripB.append(Q[k])
-                
-        stripA.sort(key = lambda point: point.y) #<-- REQUIRED
+        
+        #REQUIRED 
+        # because: while j < size and (dist := self.dist(strip[j],strip[i])) < min_val
+        # meaning this will stop the moment it finds the first y value that is less than
+        # min_val (or it gets to the end of the list). See stripClosest for more info
+        stripA.sort(key = lambda point: point.y)
 
         min_a = self.stripClosest(stripA, len(stripA), lr_d)
         min_b = self.stripClosest(stripB, len(stripB), lr_d)

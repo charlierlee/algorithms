@@ -99,7 +99,12 @@ def closestUtil(P, Q, n):
         if abs(Q[i].x - midPoint.x) < d: 
             stripQ.append(Q[i])
 
-    stripP.sort(key = lambda point: point.y) #<-- REQUIRED
+    #REQUIRED 
+    # because: while j < size and (dist := self.dist(strip[j],strip[i])) < min_val
+    # meaning this will stop the moment it finds the first y value that is less than
+    # min_val (or it gets to the end of the list). See stripClosest for more info
+    stripP.sort(key = lambda point: point.y)
+
     min_a = min(d, stripClosest(stripP, len(stripP), d)) 
     min_b = min(d, stripClosest(stripQ, len(stripQ), d))
     

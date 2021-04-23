@@ -95,7 +95,13 @@ class ClosestDistanceTest:
             if abs(Q[i].x - midPoint.x) < d: 
                 stripQ.append(Q[i])
 
+
+        #REQUIRED 
+        # because: while j < size and (dist := self.dist(strip[j],strip[i])) < min_val
+        # meaning this will stop the moment it finds the first y value that is less than
+        # min_val (or it gets to the end of the list). See stripClosest for more info
         stripP.sort(key = lambda point: point.y) #<-- REQUIRED
+
         min_a = min(d, self.stripClosest(stripP, len(stripP), d)) 
         min_b = min(d, self.stripClosest(stripQ, len(stripQ), d))
         
