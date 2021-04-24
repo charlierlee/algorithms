@@ -1,124 +1,116 @@
+#Uses python3
 import math
-import copy
-class Point():
-	def __init__(self, x, y):
-		self.x = x
-		self.y = y
+import statistics as stats
 
-class ClosestDistanceTest:
+# helper functions:
+def two_point_distance(p0,p1):
+    # returns distance between two (x,y) pairs
+    return math.sqrt( ((p0[0]-p1[0])*(p0[0]-p1[0])) + 
+                     ((p0[1] - p1[1])*(p0[1] - p1[1])) )
 
-    # A utility function to find the 
-    # distance between two points 
-    def dist(self, p1, p2):
-        return math.sqrt((p1.x - p2.x) * 
-                        (p1.x - p2.x) +
-                        (p1.y - p2.y) * 
-                        (p1.y - p2.y)) 
-    
-    # A Brute Force method to return the 
-    # smallest distance between two points 
-    # in P[] of size n
-    def bruteForce(self, P, n):
-        min_val = float('inf') 
-        for i in range(n):
-            for j in range(i + 1, n):
-                if self.dist(P[i], P[j]) < min_val:
-                    min_val = self.dist(P[i], P[j])
-    
-        return min_val
-    
-    # A utility function to find the 
-    # distance beween the closest points of 
-    # strip of given size. All points in 
-    # strip[] are sorted accordint to 
-    # y coordinate. They all have an upper 
-    # bound on minimum distance as d. 
-    # Note that this method seems to be 
-    # a O(n^2) method, but it's a O(n) 
-    # method as the inner loop runs at most 6 times
-    # IMPORTANT: Preprocessing Ruequired: strip must be sorted by 'y' point asc
-    def stripClosest(self, strip, size, d):
-        
-        # Initialize the minimum distance as d 
-        min_val = d 
-    
-        
-        # Pick all points one by one and 
-        # try the next points till the difference 
-        # between y coordinates is smaller than d. 
-        # This is a proven fact that this loop
-        # runs at most 6 times 
-        for i in range(size):
-            j = i + 1
-            while j < size and (dist := self.dist(strip[j],strip[i])) < min_val: 
-                min_val = dist
-                j += 1
-    
-        return min_val 
+def combine_xy(x_arr,y_arr):
+    # combine x_arr and y_arr to combined list of (x,y) tuples 
+    return list(zip(x_arr,y_arr))
 
-    
-    # A recursive function to find the 
-    # smallest distance. The array P contains 
-    # all points sorted according to x coordinate
-    def closestUtil(self, P, Q, n):
-        
-        # If there are 2 or 3 points, 
-        # then use brute force 
-        if n <= 3: 
-            return self.bruteForce(P, n) 
-    
-        # Find the middle point 
-        mid = n // 2
-        midPoint = P[mid]
-    
-        # Consider the vertical line passing 
-        # through the middle point calculate 
-        # the smallest distance dl on left 
-        # of middle point and dr on right side 
-        l = P[:mid]
-        r = P[mid:]
-        dl = self.closestUtil(P[:mid], Q, mid)
-        dr = self.closestUtil(P[mid:], Q, n - mid) 
-    
-        # Find the smaller of two distances 
-        d = min(dl, dr)
-    
-        # Build an array strip[] that contains 
-        # points close (closer than d) 
-        # to the line passing through the middle point 
-        stripP = []
-        stripQ = []
-        lr = l + r
-        for i in range(n): 
-            if abs(lr[i].x - midPoint.x) < d: 
-                stripP.append(lr[i])
-            if abs(Q[i].x - midPoint.x) < d: 
-                stripQ.append(Q[i])
+def find_closest_distance_brute(xy_arr):
+    # brute force approach to find closest distance 
+    dmin = math.inf
+    for i, pnt_i in enumerate(xy_arr[:-1]):      
+        dis_storage_min = min( two_point_distance(pnt_i, pnt_j) for pnt_j in xy_arr[i+1:])      
+        if dis_storage_min < dmin:
+            dmin = dis_storage_min  
+    return dmin
+
+def calc_median_x(xy_arr):
+    # return median of x values in list of (x,y) points
+    return stats.median( val[0] for val in xy_arr )
+
+def filter_set(xy_arr_y_sorted, median, distance):
+# filter initial set such than |x-median|<= distance
+    return [ val for val in xy_arr_y_sorted if abs(val[0] - median) <= distance ]
+
+def x_sort(xy_arr):
+    # sort array according to x value
+    return sorted(xy_arr, key=lambda val: val[0])
+
+def y_sort(xy_arr):
+    # sort array according to y value
+    return sorted(xy_arr, key=lambda val: val[1])
 
 
-        #REQUIRED 
-        # because: while j < size and (dist := self.dist(strip[j],strip[i])) < min_val
-        # meaning this will stop the moment it finds the first y value that is less than
-        # min_val (or it gets to the end of the list). See stripClosest for more info
-        stripP.sort(key = lambda point: point.y) #<-- REQUIRED
+def split_array(arr_x_sorted, arr_y_sorted,median):
+    # split array of size n to two arrays of n/2
+    # input is the same array twice, one sorted wrt x, the other wrt y
+    leq_arr_x_sorted = [ val for val in arr_x_sorted if val[0] < median ]
+    geq_arr_x_sorted = [ val for val in arr_x_sorted if val[0] > median ]
+    eq_arr_x        = [ val for val in arr_x_sorted if val[0] == median ]
 
-        min_a = min(d, self.stripClosest(stripP, len(stripP), d)) 
-        min_b = min(d, self.stripClosest(stripQ, len(stripQ), d))
-        
-        
-        # Find the self.closest points in strip. 
-        # Return the minimum of d and self.closest 
-        # distance is strip[] 
-        return min(min_a,min_b)
-    
-    # The main function that finds
-    # the smallest distance. 
-    # This method mainly uses self.closestUtil()
-    def closest(self,P, n):
-        P.sort(key = lambda point: point.x)
-        Q = copy.deepcopy(P)
-        Q.sort(key = lambda point: point.y)    
-    
-        # Use recursive function self.closestUtil() 
-        # to find the smallest distance 
-        return self.closestUtil(P, Q, n)
+    n = len(eq_arr_x)//2
+    leq_arr_x_sorted = leq_arr_x_sorted + eq_arr_x[:n]
+    geq_arr_x_sorted = eq_arr_x[n:] + geq_arr_x_sorted
+
+    leq_arr_y_sorted = [ val for val in arr_y_sorted if val[0] < median ]
+    geq_arr_y_sorted = [ val for val in arr_y_sorted if val[0] > median ]
+    eq_arr_y        = [ val for val in arr_y_sorted if val[0] == median ]
+
+    n = len(eq_arr_y)//2
+    leq_arr_y_sorted = leq_arr_y_sorted + eq_arr_y[:n]
+    geq_arr_y_sorted = eq_arr_y[n:] + geq_arr_y_sorted
+
+    return leq_arr_x_sorted, leq_arr_y_sorted, geq_arr_x_sorted, geq_arr_y_sorted
+
+def find_min_distance_in_rec(xy_arr_y_sorted,dmin):
+    # takes in array sorted in y, and minimum distance of n/2 halves
+    # for each point it computes distance to 7 subsequent points
+    # output min distance encountered
+
+    dmin_rec = dmin
+
+    if len(xy_arr_y_sorted) == 1:
+        return math.inf
+
+    if len(xy_arr_y_sorted) > 7:            
+        for i, pnt_i in enumerate(xy_arr_y_sorted[:-7]):
+            dis_storage_min = min(two_point_distance(pnt_i, pnt_j) 
+                                 for pnt_j in xy_arr_y_sorted[i+1:i+1+7])
+            if dis_storage_min < dmin_rec:
+                dmin_rec = dis_storage_min
+
+        dis_storage_min = find_closest_distance_brute(xy_arr_y_sorted[-7:])
+        if dis_storage_min < dmin_rec:
+            dmin_rec = dis_storage_min
+    else:
+        for k, pnt_k in enumerate(xy_arr_y_sorted[:-1]):      
+            dis_storage_min = min( two_point_distance(pnt_k, pnt_l) 
+                                for pnt_l in xy_arr_y_sorted[k+1:])      
+            if dis_storage_min < dmin_rec:
+                dmin_rec = dis_storage_min 
+
+    return dmin_rec             
+
+def find_closest_distance_recur(xy_arr_x_sorted, xy_arr_y_sorted):
+    # recursive function to find closest distance between points
+    if len(xy_arr_x_sorted) <=3 :
+        return find_closest_distance_brute(xy_arr_x_sorted)
+
+    median = calc_median_x(xy_arr_x_sorted)
+    leq_arr_x_sorted, leq_arr_y_sorted , grt_arr_x_sorted, grt_arr_y_sorted = split_array(xy_arr_x_sorted, xy_arr_y_sorted, median)
+
+    distance_left = find_closest_distance_recur(leq_arr_x_sorted, leq_arr_y_sorted)
+    distance_right = find_closest_distance_recur(grt_arr_x_sorted, grt_arr_y_sorted)
+    distance_min = min(distance_left, distance_right)
+
+    filt_out = filter_set(xy_arr_y_sorted, median, distance_min)
+    distance_filt = find_min_distance_in_rec(filt_out, distance_min)
+
+    return min(distance_min, distance_filt)
+
+def find_closest_point(x_arr, y_arr):
+    # input is x,y points in two arrays, all x's in x_arr, all y's in y_arr
+    xy_arr = combine_xy(x_arr,y_arr)
+    xy_arr_x_sorted = x_sort(xy_arr)
+    xy_arr_y_sored = y_sort(xy_arr)
+
+    min_distance = find_closest_distance_recur(xy_arr_x_sorted, xy_arr_y_sored)
+
+    return min_distance

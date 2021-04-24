@@ -8,10 +8,8 @@ class Point():
 class ClosestDistance:
 
     def dist(self, p1, p2):
-        return math.sqrt((p1.x - p2.x) *
-                        (p1.x - p2.x) +
-                        (p1.y - p2.y) *
-                        (p1.y - p2.y))
+        return math.sqrt( ((p1.x-p2.x)*(p1.x-p2.x)) + 
+                        ((p1.y - p2.y)*(p1.y - p2.y)) )
                         
     def __init__(self, items):
         self.recursiveCalls = 0
@@ -28,15 +26,22 @@ class ClosestDistance:
     # A Brute Force method to return the
     # smallest distance between two points
     # in P[] of size n
-    def bruteForce(self, P, n, min_val=float('inf')):
-        best = []
-        for i in range(n):
-            for j in range(i + 1, n):
-                min_distance = self.dist(P[i], P[j])
-                if min_distance < min_val:
-                    min_val = self.dist(P[i], P[j])
-                    best = [P[i], P[j]]
-        return best, min_val
+    def bruteForce(self, xy_arr):
+        # brute force approach to find closest distance 
+        dmin = math.inf
+        best = None
+        for i, pnt_i in enumerate(xy_arr[:-1]): 
+            dis_storage_min = math.inf
+            dmin_rec_best = []     
+            for pnt_j in xy_arr[i+1:]:
+                dis_storage_min = self.dist(pnt_i, pnt_j)   
+                if dis_storage_min < dmin:
+                    dmin = dis_storage_min  
+                    dmin_rec_best = pnt_i, pnt_j
+            if dis_storage_min < dmin:
+                dmin = dis_storage_min  
+                best = pnt_i, pnt_j
+        return best, dmin
 
     def solveRecursive(self, x, y, n):
         self.recursiveCalls += 1
@@ -46,7 +51,7 @@ class ClosestDistance:
         # If there are 2 or 3 points, 
         # then use brute force 
         if n <= 3:
-            return self.bruteForce(x, n)
+            return self.bruteForce(x)
 
         mid = n//2
         #midPoint = x[mid-1]
@@ -62,12 +67,12 @@ class ClosestDistance:
         else:
             bestP = r12
             best = bestR
-        s12, bestS = self.merge(Lx, Rx, Ly, Ry, best, n)
+        s12, bestS = self.merge(Lx, Rx, Ly, Ry, best, bestP, n)
         if bestS < best:
             bestP = s12
             best = bestS
         return bestP, best
-    def merge(self, Lx, Rx, Ly, Ry, lr_d, n):
+    def merge(self, Lx, Rx, Ly, Ry, lr_d, bestP, n):
         midPoint = Lx[len(Lx)-1]
         Sx = []
         Px = [0] * n
@@ -87,7 +92,7 @@ class ClosestDistance:
 
         Sx.sort(key = lambda point: point.y) #<-- REQUIRED
 
-        bestL, lr_d2 = self.stripClosest(Sx, len(Sx), [], lr_d)
+        bestL, lr_d2 = self.stripClosest(Sx, bestP, lr_d)
 
         Sy = []
         Py = [0] * n
@@ -105,27 +110,50 @@ class ClosestDistance:
                 j+=1
             if abs(Py[k].x - midPoint.x) < leftside: 
                 Sy.append(Py[k])
-        best, lr_d = self.stripClosest(Sy, len(Sy), bestL, lr_d)
+        best, lr_d = self.stripClosest(Sy, bestL, lr_d)
 
         if lr_d2 < lr_d:
             best = bestL
             lr_d = lr_d2
         return best, lr_d
-    
-    def stripClosest(self, strip, size, best, min_dis):
-        '''
-        for i in range(min(6, size - 1), size):
-            for j in range(max(0, i - 6), i):
-                current_dis = self.dist(strip[i],strip[j])
-                if current_dis < min_dis:
-                    min_dis = current_dis
-                    best = [strip[i], strip[j]]
-        return best, min_dis
-        '''
-        for i in range(size):
-            j = i + 1
-            while j < size and (dist := self.dist(strip[i],strip[j])) < min_dis: 
-                min_dis = dist
-                best = [strip[i], strip[j]]
-                j += 1
-        return best, min_dis
+        
+    def stripClosest(self, xy_arr_y_sorted, best, dmin):
+        # takes in array sorted in y, and minimum distance of n/2 halves
+        # for each point it computes distance to 7 subsequent points
+        # output min distance encountered
+
+        dmin_rec = dmin
+        dmin_rec_best = best
+        if len(xy_arr_y_sorted) == 1:
+            return [], math.inf
+
+        if len(xy_arr_y_sorted) > 7:            
+            for i, pnt_i in enumerate(xy_arr_y_sorted[:-7]):
+                dis_storage_min = math.inf
+                dmin_rec_best = []
+                for pnt_j in xy_arr_y_sorted[i+1:i+1+7]:
+                    dis_storage_min = self.dist(pnt_i, pnt_j)
+                    if dis_storage_min < dmin_rec:
+                        dmin_rec = dis_storage_min
+                        dmin_rec_best = [pnt_i,pnt_j]
+                if dis_storage_min < dmin_rec:
+                    dmin_rec = dis_storage_min
+                    dmin_rec_best = [pnt_i,pnt_j]
+            best, dis_storage_min = self.bruteForce(xy_arr_y_sorted[-7:])
+            if dis_storage_min < dmin_rec:
+                dmin_rec = dis_storage_min
+                dmin_rec_best = best
+        else:
+            for k, pnt_k in enumerate(xy_arr_y_sorted[:-1]):    
+                dis_storage_min = math.inf
+                dmin_rec_best = []
+                for pnt_l in xy_arr_y_sorted[k+1:]:
+                    dis_storage_min = self.dist(pnt_k, pnt_l)
+                    if dis_storage_min < dmin_rec:
+                        dmin_rec = dis_storage_min 
+                        dmin_rec_best = [pnt_k, pnt_l]
+                if dis_storage_min < dmin_rec:
+                    dmin_rec = dis_storage_min 
+                    dmin_rec_best = dmin_rec_best
+
+        return dmin_rec_best, dmin_rec  

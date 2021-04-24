@@ -169,42 +169,42 @@ def testClostestDistance():
         b3 = copy.copy(b)
         print(len(a))
         print(len(b))
-        import closestDistanceTest
 
         baseLineResult = None
-        t3Result = None
+        bruteForceResult = None
         n = len(a3)
         if DoBruteForce:
             start_time = time.time()
             P3 = [closestDistanceTest.Point(x, y) for x,y in zip(a3,b3)]
             t3 = closestDistanceTest.ClosestDistanceTest()
-            t3Result = t3.bruteForce(P3, n)
-            print("bruteForce smallest distance is",t3Result)
+            bruteForceResult = t3.bruteForce(P3, n)
+            print("bruteForce smallest distance is",bruteForceResult)
             print("--- %s seconds ---" % (time.time() - start_time))
 
         n = len(a2)
         start_time = time.time()
-        P2 = [closestDistanceTest.Point(x, y) for x,y in zip(a2,b2)]
-        t2 = closestDistanceTest.ClosestDistanceTest()
-        baseLineResult = t2.closest(P2, n)
+        import closestDistanceTest
+        #P2 = [closestDistanceTest.Point(x, y) for x,y in zip(a2,b2)]
+        #t2 = closestDistanceTest.ClosestDistanceTest()
+        baseLineResult = closestDistanceTest.find_closest_point(a2, b2)
         print("baseline smallest distance is",baseLineResult)
         print("--- %s seconds ---" % (time.time() - start_time))
 
         
 
         P1 = [closestDistance.Point(x, y) for x,y in zip(a1,b1)]
-        print('ClostestDistance started')
-        
+        print('ClostestDistance started') 
         start_time = time.time()
         t1 = closestDistance.ClosestDistance(P1)
-        a, t1Result = t1.solve()
+        a, closestDistanceResult = t1.solve()
         print("--- %s seconds ---" % (time.time() - start_time))
-        print("ClostestDistance smallest distance is",t1Result)
+        print("ClostestDistance smallest distance is",closestDistanceResult)
         outcome = False
         if DoBruteForce:
-            outcome = t1Result == baseLineResult == t3Result
+            outcome = bruteForceResult == baseLineResult
+            #outcome = closestDistanceResult == bruteForceResult
         else:
-            outcome = t1Result == baseLineResult
+            outcome = closestDistanceResult == baseLineResult
         print(outcome)
 
 #testMergeSort()
