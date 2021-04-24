@@ -156,7 +156,7 @@ def testClostestDistance():
         #a = random.sample(range(1, 2**6), 2**4)
         #b = random.sample(range(1, 2**6), 2**4)
         
-        unique_set = random.sample(range(1, 10**7), 10**4)
+        unique_set = random.sample(range(1, 10**7), 10**6)
         a, b = unique_set[:len(unique_set)//2], unique_set[len(unique_set)//2:]
 
         #print(a)

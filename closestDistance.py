@@ -74,49 +74,16 @@ class ClosestDistance:
         return bestP, best
     def merge(self, Lx, Rx, Ly, Ry, lr_d, bestP, n):
         midPoint = Lx[len(Lx)-1]
-        Sx = []
-        Px = [0] * n
-        i, j = 0, 0
-        Lx = Lx + [Point(math.inf,math.inf)]
-        Rx = Rx + [Point(math.inf,math.inf)]
-        for k in range(0, n):
-            if Lx[i].x < Rx[j].x:
-                Px[k] = Lx[i]
-                i+=1
-            else:
-                Px[k] = Rx[j]
-                j+=1
-        
-            if abs(Px[k].x - midPoint.x) < lr_d: 
-                Sx.append(Px[k])
-
-        Sx.sort(key = lambda point: point.y) #<-- REQUIRED
-
-        bestL, lr_d2 = self.stripClosest(Sx, bestP, lr_d)
-
         Sy = []
-        Py = [0] * n
-        Ly = Ly + [Point(math.inf,math.inf)]
-        Ry = Ry + [Point(math.inf,math.inf)]
-        i, j = 0, 0
-        
-        leftside = abs(midPoint.x - lr_d)
-        for k in range(0, n):
-            if Ly[i].y < Ry[j].y:
-                Py[k] = Ly[i]
-                i+=1
-            else:
-                Py[k] = Ry[j]
-                j+=1
-            if abs(Py[k].x - midPoint.x) < leftside: 
-                Sy.append(Py[k])
-        best, lr_d = self.stripClosest(Sy, bestL, lr_d)
+        leftside = abs(midPoint.x - lr_d) * 2
+        for k in range(0, len(Ly)):
+            if abs(Ly[k].x - midPoint.x) <= leftside: 
+                Sy.append(Ly[k])
+        for k in range(0, len(Ry)):
+            if abs(Ry[k].x - midPoint.x) <= leftside: 
+                Sy.append(Ry[k])
+        return self.stripClosest(Sy, bestP, lr_d)
 
-        if lr_d2 < lr_d:
-            best = bestL
-            lr_d = lr_d2
-        return best, lr_d
-        
     def stripClosest(self, xy_arr_y_sorted, best, dmin):
         # takes in array sorted in y, and minimum distance of n/2 halves
         # for each point it computes distance to 7 subsequent points
