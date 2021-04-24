@@ -83,7 +83,8 @@ class ClosestDistance:
             if abs(Ry[k].x - midPoint.x) <= leftside: 
                 Sy.append(Ry[k])
         return self.stripClosest(Sy, bestP, lr_d)
-
+    
+    #https://codereview.stackexchange.com/questions/198471/finding-the-closest-pair-of-points-divide-and-conquer/199668#199668
     def stripClosest(self, xy_arr_y_sorted, best, dmin):
         # takes in array sorted in y, and minimum distance of n/2 halves
         # for each point it computes distance to 7 subsequent points
