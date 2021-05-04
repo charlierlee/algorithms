@@ -207,5 +207,37 @@ def testClostestDistance():
             outcome = closestDistanceResult == baseLineResult
         print(outcome)
 
-#testMergeSort()
-testClostestDistance()
+def testQuickSort():
+    import quickSort
+    import mergeSort
+    import random
+    import copy
+    a = random.sample(range(1, 10**6+1), 10**6)
+    #a = [3,8,2,5,1,4,7,6]
+    a1 = copy.copy(a)
+    b1 = copy.copy(a)
+    print('quickSort started')
+    tA = quickSort.QuickSort(a1)
+    start_time = time.time()
+    tA.solve()
+    testA = a1
+    #print(testA)
+    print("quicksort done")
+    print("--- %s seconds ---" % (time.time() - start_time))
+    
+    print('mergeSort started')
+    tB = mergeSort.MergeSort(b1)
+    start_time = time.time()
+    testB = tB.solve()
+    #print(testB)
+    print('mergeSort done')
+    print("--- %s seconds ---" % (time.time() - start_time))
+    
+    if len(testA) != len(testB):
+        print('array not equal', len(testA), len(testB))
+        return
+    for i in range(len(a)):
+        if (testA[i]) != (testB[i]):
+            print("error", testA[i], testB[i])
+    
+testQuickSort()
