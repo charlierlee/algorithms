@@ -242,10 +242,18 @@ def testQuickSort():
 
 def testBirthdayProblem():
     import birthdayProblem
-    t = birthdayProblem.BirthdayProblem(365, 1)
+    import math
+    n = 365
+    t = birthdayProblem.BirthdayProblem(n, 1)
     result = t.solve()
-    print('actual_value',result[0])
-    print('dice_count', result[1])
-    print('expected_value', result[2])
+    actual_value = result[0]
+    dice_count = result[1]
+    expected_value = result[2]
+    combo_count = result[3]
+    print('actual_value',actual_value)
+    print('dice_count', dice_count)
+    print('expected_value', expected_value)
+    print('combo_count', combo_count)
+    print('math.comb(n,k)(',dice_count,',',2,')',math.comb(dice_count,2))
 
 testBirthdayProblem()
