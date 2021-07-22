@@ -239,5 +239,13 @@ def testQuickSort():
     for i in range(len(a)):
         if (testA[i]) != (testB[i]):
             print("error", testA[i], testB[i])
-    
-testQuickSort()
+
+def testBirthdayProblem():
+    import birthdayProblem
+    t = birthdayProblem.BirthdayProblem(365, 1)
+    result = t.solve()
+    print('actual_value',result[0])
+    print('dice_count', result[1])
+    print('expected_value', result[2])
+
+testBirthdayProblem()
