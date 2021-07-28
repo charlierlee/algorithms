@@ -11,20 +11,50 @@ class DSelect:
     def solve(self):
         return self.solveRecursive(self.items, 0, len(self.items))
 
+    def medianOfMedian(self, A):
+        self.recursiveCalls += 1
+        n = len(A)
+        if n == 1:
+            return A[0]
+        C = [0] * math.ceil(n/5)
+        Ci = 0
+        chunks = self.chunks(A,5)
+        for k, x in enumerate(chunks):
+            obj = mergeSort.MergeSort(x)
+            lst = obj.solve()
+            mid = len(lst)//2
+            C[Ci] = lst[mid]
+            Ci += 1
+        return self.medianOfMedian(C)
+
+    def dChoosePivot(self, A, l, r):
+        #tmp = [0] * (r - l)
+        #tmpi = 0
+        #for k in range(l,r):
+        #    tmp[tmpi] = A[k]
+        #    tmpi += 1
+        tmp = list(self.section(A,l,r))
+        median = self.medianOfMedian(tmp)
+        return A.index(median)
+
+    def rChoosePivot(self, l, r):
+        return random.randint(l, r-1)
+
+    def section(self, lst, l,r):
+        for i in range(l, r):
+            yield lst[i]
+
+    def chunks(self, lst, n):
+        """Yield successive n-sized chunks from lst."""
+        for i in range(0, len(lst), n):
+            yield lst[i:i + n]
+
     def swap(self, A, l, r):
         temp = A[l]
         A[l] = A[r]
         A[r] = temp
         return A
 
-    def choosePivot(self, l, r):
-        return random.randint(l, r-1)
-
-    def chunks(self, lst, n):
-        """Yield successive n-sized chunks from lst."""
-        for i in range(0, len(lst), n):
-            yield lst[i:i + n]
-            
     def partition(self, A, l, r):
         p = A[l]
         i = l + 1
@@ -36,32 +66,12 @@ class DSelect:
         A = self.swap(A, l, i-1)
         return A, i-1
 
-    def medianOfMedian(self, A):
-        self.recursiveCalls += 1
-        if len(A) == 1:
-            return A[0]
-        C = []
-        chunks = list(self.chunks(list(A),5))
-        for k in range(0,len(chunks)):
-            obj = mergeSort.MergeSort(chunks[k])
-            lst = obj.solve()
-            #print('lst',lst)
-            mid = len(lst)//2
-            #print('mid',mid)
-            C.append(lst[mid])
-        return self.medianOfMedian(C)
-
     def solveRecursive(self, A, l, r):
         self.recursiveCalls += 1
         if l >= r:
             return A[0]
-        tmp = []
-        for k in range(l,r):
-            tmp.append(A[k])
-        i = self.medianOfMedian(tmp)
-        i = A.index(i)
-
-        #i = self.choosePivot(l, r)
+            
+        i = self.dChoosePivot(A, l, r)
 
         A = self.swap(A, l, i)
         A, j = self.partition(A, l,r)
