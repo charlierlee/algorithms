@@ -286,4 +286,35 @@ def testRSelect():
         print('select is not equal', testA, testB)
         return
     print(testA, testB)
-testRSelect()
+
+def testDSelect():
+    import dSelect
+    import rSelect
+    import random
+    import copy
+    a = random.sample(range(1, 10**10+1), 10**7)
+    #a = [11,6,10,2,15,8,1,7,14,3,9,12,4,5,13,16,18,23,24,26]
+    a1 = copy.copy(a)
+    b1 = copy.copy(a)
+    print('dSelect started')
+    tA = dSelect.DSelect(a1, 1000)
+    start_time = time.time()
+    testA = tA.solve()
+    #print(testA)
+    print("dSelect done")
+    print("--- %s seconds ---" % (time.time() - start_time))
+    
+    print('rSelect started')
+    tB = rSelect.RSelect(b1, 1000)
+    start_time = time.time()
+    testB = tB.solve()
+    #print(testB)
+    print('rSelect done')
+    print("--- %s seconds ---" % (time.time() - start_time))
+    
+    if testA != testB:
+        print('select is not equal', testA, testB)
+        return
+    print(testA, testB)
+
+testDSelect()
