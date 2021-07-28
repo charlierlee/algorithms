@@ -256,4 +256,34 @@ def testBirthdayProblem():
     print('combo_count', combo_count)
     print('math.comb(n,k)(',dice_count,',',2,')',math.comb(dice_count,2))
 
-testBirthdayProblem()
+def testRSelect():
+    import quickSort
+    import rSelect
+    import random
+    import copy
+    a = random.sample(range(1, 10**9+1), 10**6)
+    #a = [3,8,2,5,1,4,7,6]
+    a1 = copy.copy(a)
+    b1 = copy.copy(a)
+    print('quickSort started')
+    tA = quickSort.QuickSort(a1)
+    start_time = time.time()
+    tA.solve()
+    testA = a1[10000]
+    #print(testA)
+    print("quicksort done")
+    print("--- %s seconds ---" % (time.time() - start_time))
+    
+    print('rSelect started')
+    tB = rSelect.RSelect(b1, 10000)
+    start_time = time.time()
+    testB = tB.solve()
+    #print(testB)
+    print('rSelect done')
+    print("--- %s seconds ---" % (time.time() - start_time))
+    
+    if testA != testB:
+        print('select is not equal', testA, testB)
+        return
+    print(testA, testB)
+testRSelect()
