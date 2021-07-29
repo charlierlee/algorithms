@@ -215,7 +215,7 @@ def testQuickSort():
     a = random.sample(range(1, 10**6+1), 10**6)
     #a = [3,8,2,5,1,4,7,6]
     a1 = copy.copy(a)
-    b1 = copy.copy(a)
+    a2 = copy.copy(a)
     print('quickSort started')
     tA = quickSort.QuickSort(a1)
     start_time = time.time()
@@ -226,7 +226,7 @@ def testQuickSort():
     print("--- %s seconds ---" % (time.time() - start_time))
     
     print('mergeSort started')
-    tB = mergeSort.MergeSort(b1)
+    tB = mergeSort.MergeSort(a2)
     start_time = time.time()
     testB = tB.solve()
     #print(testB)
@@ -264,7 +264,7 @@ def testRSelect():
     a = random.sample(range(1, 10**9+1), 10**6)
     #a = [3,8,2,5,1,4,7,6]
     a1 = copy.copy(a)
-    b1 = copy.copy(a)
+    a2 = copy.copy(a)
     print('quickSort started')
     tA = quickSort.QuickSort(a1)
     start_time = time.time()
@@ -275,7 +275,7 @@ def testRSelect():
     print("--- %s seconds ---" % (time.time() - start_time))
     
     print('rSelect started')
-    tB = rSelect.RSelect(b1, 10000)
+    tB = rSelect.RSelect(a2, 10000)
     start_time = time.time()
     testB = tB.solve()
     #print(testB)
@@ -295,7 +295,7 @@ def testDSelect():
     a = random.sample(range(1, 10**10+1), 10**7)
     #a = [11,6,10,2,15,8,1,7,14,3,9,12,4,5,13,16,18,23,24,26]
     a1 = copy.copy(a)
-    b1 = copy.copy(a)
+    a2 = copy.copy(a)
     print('dSelect started')
     tA = dSelect.DSelect(a1, 1000)
     start_time = time.time()
@@ -305,7 +305,7 @@ def testDSelect():
     print("--- %s seconds ---" % (time.time() - start_time))
     
     print('rSelect started')
-    tB = rSelect.RSelect(b1, 1000)
+    tB = rSelect.RSelect(a2, 1000)
     start_time = time.time()
     testB = tB.solve()
     #print(testB)
@@ -317,4 +317,52 @@ def testDSelect():
         return
     print(testA, testB)
 
-testDSelect()
+
+def testPointDSelect():
+    import dSelect
+    import pointDSelect
+    import random
+    import copy
+    import numpy as np
+    a = random.sample(range(1, 10**10+1), 10**6)
+    w = random.sample(range(1, 10**10+1), 10**6)
+    #a = [11,6,10,2,15,8,1,7,14,3,9,12,4,5,13,16,18,23,24,26]
+    a1 = copy.copy(a)
+    a2 = copy.copy(a)
+    total = sum(w)
+    weights = [ pop / total for pop in a]
+    w1 = copy.copy(weights)
+    w2 = copy.copy(weights)
+    a1w1 = [pointDSelect.Point(x, y) for x,y in zip(a1,w1)]
+    a2w2 = [pointDSelect.Point(x, y) for x,y in zip(a1,w2)]
+    print('pointDSelect started')
+    tA = pointDSelect.PointDSelect(a1w1, len(a1w1)//2)
+    start_time = time.time()
+    testA = tA.solve()
+    #print(testA)
+    print("pointDSelect done")
+    print("--- %s seconds ---" % (time.time() - start_time))
+    
+    print('dSelect started')
+    tB = dSelect.DSelect(a2, len(a1w1)//2)
+    start_time = time.time()
+    testB = tB.solve()
+    #print(testB)
+    print('dSelect done')
+    print("--- %s seconds ---" % (time.time() - start_time))
+    
+    if testA.x != testB:
+        print('select is not equal', testA, testB)
+        return
+    print(testA.x, testB)
+
+    sl = 0
+    sr = 0
+    for i in range(0,a1.index(testA.x)):
+        sl += a1w1[i].y
+    for i in range(a1.index(testA.x) + 1,len(a1)):
+        sr += a1w1[i].y
+    print('sl',sl)
+    print('sr',sr)
+
+testPointDSelect()
