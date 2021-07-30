@@ -330,6 +330,7 @@ def testPointDSelect():
     w = random.sample(range(1, 10**10+1), 10**6)
     #a = [11,6,10,2,15,8,1,7,14,3,9,12,4,5,13,16,18,23,24,26]
     a1 = copy.copy(a)
+    a2 = copy.copy(a)
     total = sum(w)
     weights = [ pop / total for pop in a]
     w1 = copy.copy(weights)
@@ -355,59 +356,4 @@ def testPointDSelect():
         return
     print(testA.x, testB)
 
-def testWeightedDSelect():
-    import dSelect
-    import weightedDSelect
-    import random
-    import copy
-    import numpy as np
-    a = random.sample(range(1, 10**4+1), 10**3)
-    w = random.sample(range(1, 10**4+1), 10**3)
-    #a = [11,6,10,2,15,8,1,7,14,3,9,12,4,5,13,16,18,23,24,26]
-    a1 = copy.copy(a)
-    total = sum(w)
-    weights = [ pop / total for pop in a]
-    w1 = copy.copy(weights)
-    a1w1 = [weightedDSelect.Point(x, y) for x,y in zip(a1,w1)]
-    print('weightedDSelect started')
-    tA = weightedDSelect.WeightedDSelect(a1w1)
-    start_time = time.time()
-    testA = tA.solve()
-    #print(testA)
-    print("weightedDSelect done")
-    print("--- %s seconds ---" % (time.time() - start_time))
-    
-    import statistics
-    median = statistics.median(a1)
-    print('median',median)
-    print('len(a1w1)',len(a1w1))
-    print('a1w1.index(testA)',a1w1.index(testA))
-    print('testA.x',testA.x)
-    print('testA.y',testA.y)
-
-    
-
-    def weighted_median(data, weights):
-        """
-        Args:
-        data (list or numpy.array): data
-        weights (list or numpy.array): weights
-        """
-        data, weights = np.array(data).squeeze(), np.array(weights).squeeze()
-        s_data, s_weights = map(np.array, zip(*sorted(zip(data, weights))))
-        midpoint = 0.5 * sum(s_weights)
-        if any(weights > midpoint):
-            w_median = (data[weights == np.max(weights)])[0]
-        else:
-            cs_weights = np.cumsum(s_weights)
-            idx = np.where(cs_weights <= midpoint)[0][-1]
-            if cs_weights[idx] == midpoint:
-                w_median = np.mean(s_data[idx:idx+2])
-            else:
-                w_median = s_data[idx+1]
-        return w_median
-    test = weighted_median(a1,w1)
-    print('weighted_median',test)
-
-
-testWeightedDSelect()
+testPointDSelect()
