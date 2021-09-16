@@ -1,0 +1,45 @@
+https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-042j-mathematics-for-computer-science-fall-2010/recitations/
+Team Problem: A Mystery
+A certain cabal within the 6.042 course staﬀ is plotting to make the ﬁnal exam ridiculously
+hard. (“Problem 1. Prove that the axioms of mathematics are complete and consistent.
+Express your answer in Mayan hieroglyphics.”) The only way to stop their evil plan is to
+determine exactly who is in the cabal. The course staﬀ consists of nine people:
+{Oscar, Stav, Darren, Patrice, David, Nick, Martyna, Marten, Tom}
+The cabal is a subset of these nine. A membership roster has been found and appears below,
+but it is deviously encrypted in logic notation. The predicate incabal indicates who is in the
+cabal; that is, incabal(x) is true if and only if x is a member. Translate each statement below
+into English and deduce who is in the cabal.
+
+incabal means in group
+
+∃ 	Exists
+!=	Not Equal
+∧ 	And
+∨	Or
+→	implies, if ..., then ..., IMPLIES
+∀	for all
+¬	Not
+
+(i) ∃x ∃y ∃z (x != y ∧ x != z ∧ y != z ∧ incabal(x) ∧ incabal(y) ∧ incabal(z))
+	- 3 unique members exist (x, y, and z)
+(ii) ¬ (incabal(Stav) ∧ incabal(David))
+	- Not Stav and David are in the group
+	- An equal meaning to this is either Stav OR David are in the group
+(iii) (incabal(Martyna) ∨ incabal(Patrice)) → ∀x incabal(x)
+	- if Martyna OR Patrice are in the group then for all x are in the group.
+	- This is a lie because only 3 people can be in the group and for all x implies all 9
+(iv) incabal(Stav) → incabal(David)
+	- if Stav is in, then David is in
+	- It just said above they both can't be in the group so Stav can't be in group
+(v) incabal(Darren) → incabal(Martyna)
+	- if Darren is in then Martyna is in
+	- this leads to a dead end because of (iii)
+(vi) (incabal(Oscar) ∨ incabal(Nick)) → ¬incabal(Tom)
+	- if Oscar or Nick then Tom is not in.
+	- So it could be Oscar and/or Nick
+(vii) (incabal(Oscar) ∨ incabal(David)) → ¬incabal(Marten)
+	- if Oscar or David then not Marten
+
+Therefore:
+The only remaining people that could be in the group is:
+Oscar, David, Nick
