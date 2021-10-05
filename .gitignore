@@ -1,2 +1,4 @@
 env
 __pycache__
+maths/pca/solar-data1.csv
+maths/pca/solar-data2.csv
