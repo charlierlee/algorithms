@@ -2,6 +2,11 @@
 import math
 import statistics as stats
 
+class Point():
+	def __init__(self, x, y):
+		self.x = x
+		self.y = y
+
 # helper functions:
 def two_point_distance(p0,p1):
     # returns distance between two (x,y) pairs

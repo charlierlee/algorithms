@@ -107,10 +107,6 @@ class ClosestDistance:
                 if dis_storage_min < dmin_rec:
                     dmin_rec = dis_storage_min
                     dmin_rec_best = [pnt_i,pnt_j]
-            best, dis_storage_min = self.bruteForce(xy_arr_y_sorted[-7:])
-            if dis_storage_min < dmin_rec:
-                dmin_rec = dis_storage_min
-                dmin_rec_best = best
         else:
             for k, pnt_k in enumerate(xy_arr_y_sorted[:-1]):    
                 dis_storage_min = math.inf

@@ -160,7 +160,7 @@ def testClostestDistance():
         #a = random.sample(range(1, 2**6), 2**4)
         #b = random.sample(range(1, 2**6), 2**4)
         
-        unique_set = random.sample(range(1, 10**7), 10**6)
+        unique_set = random.sample(range(1, 10**6), 10**5)
         a, b = unique_set[:len(unique_set)//2], unique_set[len(unique_set)//2:]
 
         #print(a)
@@ -177,11 +177,13 @@ def testClostestDistance():
         baseLineResult = None
         bruteForceResult = None
         n = len(a3)
+        P3 = None
+        t3 = None
+        import closestDistanceTest_Fixed
         if DoBruteForce:
             start_time = time.time()
-            P3 = [closestDistanceTest.Point(x, y) for x,y in zip(a3,b3)]
-            t3 = closestDistanceTest.ClosestDistanceTest()
-            bruteForceResult = t3.bruteForce(P3, n)
+            P3 = [closestDistanceTest_Fixed.Point(x, y) for x,y in zip(a3,b3)]
+            bruteForceResult = closestDistanceTest_Fixed.bruteForce(P3)
             print("bruteForce smallest distance is",bruteForceResult)
             print("--- %s seconds ---" % (time.time() - start_time))
 
@@ -358,4 +360,4 @@ def testPointDSelect():
         return
     print(testA.x, testB)
 
-testPointDSelect()
+testClostestDistance()
