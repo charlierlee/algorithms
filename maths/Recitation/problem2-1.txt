@@ -1,0 +1,32 @@
+https://ocw.mit.edu/courses/electrical-engineering-and-computer-science/6-042j-mathematics-for-computer-science-fall-2010/recitations/
+
+
+Perhaps you encountered this classic formula in school:
+1 + r + r^2 + r^3 + . . . + r^n = 1 - r^(n+1) / 1−r
+
+First use the well ordering principle, and 
+ then induction, to prove that this formula 
+ is correct for all real values r != 1
+
+16/b = 4 IMPLIES b = 4
+16/b = 8 IMPLIES b = 2
+16/b = 16 IMPLIES b = 1
+16/b = 32 IMPLIES b = 1/2
+(a/b) = r IMPLIES a = r * b
+
+R0 = 1
+R1 = 1 + r
+R2 = 1 + r + r^2
+R3 = 1 + r + r^2 + r^3
+
+(1-r^(2+1))/(1-r) = R2 IMPLIES (1-r^3) = R2 * (1-r)
+
+(1-r^3) = R2 * (1-r)
+(1-r^3) = (1 + r + r^2) * (1-r)
+(1-r^3) = 1(1-r)+r(1-r)+r^2(1-r)
+(1-r^3) = 1-r+r-r^2+r^2-r^3
+(1-r^3) = 1 - r^3
+
+Todo: 
+Use induction to prove from n==2 to n as any real number
+Prove that the formula is correct for all real values r!=1
