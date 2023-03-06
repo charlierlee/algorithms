@@ -1,0 +1,29 @@
+proof-by-contradiction
+
+We can prove that the √(2) is irrational by using a proof by contradiction.
+In order to use the proof by contradiction we need to try to prove that √(2) is rational until we end up with a contradiction. This contradiction proves that √(2) is in fact irrational.
+
+First let's define √(2) as a ratio (making it rational)
+√(2) = a/b
+
+Let's now assume that a/b has been reduced to it's lowest common denominator. So a/b has no common factors besides 1. Both a and b are both integers, and both a and b cannot be even because if they were both even then they would have a common factor. By definition of rationality, there exist integers a/b such that a,b are coprime integers > 0 whose only common factor is 1, and the ratio of a/b is irreducible.
+
+Let's multiply both sides by a power of 2 which gives you:
+
+2 = a^2/b^2
+
+Then I can multiply both sides by b^2 which gives you
+
+2*b^2 = a^2
+
+Let's look at 2*b^2
+Whatever a is here must be even. Any even number multiplied by an even number gives us an even number. Likewise, any odd number multiplied by an odd number gives us a odd number.
+a = the product of 2 times some integer... Let's say 2k
+We can then represent a as 2k where k is some integer, therefore
+2*b^2 = (2k)^2 = a^2
+We can rewrite (2k)^2 as 4k^2 and then divide both sides by 2
+(2*b^2)/2 = (4k^2)/2
+b^2 = 2k*2
+Showing that b is also even
+If both a and b have a common factor of 2 then a/b is reduceable. If a/b are reducable then this contradicts our definition of rationality which states that the ratio of a/b is irreducible.
+
